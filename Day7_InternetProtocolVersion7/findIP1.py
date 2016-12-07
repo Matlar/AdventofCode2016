@@ -1,12 +1,9 @@
-import re
-
 def hasAbba(message):
-	print(message)
-	for i in range(1, len(message) - 2):
-		a = message[i - 1]
-		b = message[i]
-		c = message[i + 1]
-		d = message[i + 2]
+	for i in range(0, len(message) - 3):
+		a = message[i]
+		b = message[i + 1]
+		c = message[i + 2]
+		d = message[i + 3]
 		if a == d and b == c and a != b:
 			return True
 	return False
@@ -15,22 +12,20 @@ def hasAbba(message):
 with open("input.txt") as f:
 	validIPs = 0
 	for line in f.readlines():
-		print()
 		message = line.strip()
 		outside = ""
 		inside = ""
 		within = False
-		insideCorrect = True
-		outsideCorrect = False
+		validIP = False
 		for char in message:
 			if char == "[":
 				if hasAbba(outside):
-					outsideCorrect = True
+					validIP = True
 				outside = ""
 				within = True
 			elif char == "]":
 				if hasAbba(inside):
-					insideCorrect = False
+					validIP = False
 					break
 				inside = ""
 				within = False
@@ -39,10 +34,7 @@ with open("input.txt") as f:
 			elif not within:
 				outside += char
 		if hasAbba(outside):
-			outsideCorrect = True
-
-		if insideCorrect and outsideCorrect:
+			validIP = True
+		if validIP:
 			validIPs += 1
-		print(validIPs)
-
-	print("validIPs", validIPs)
+	print("Valid ip's:", validIPs)

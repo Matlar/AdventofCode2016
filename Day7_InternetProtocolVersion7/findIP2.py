@@ -1,5 +1,3 @@
-import re
-
 def findABA(message):
 	abas = []
 	for i in range(len(message) - 2):
@@ -13,10 +11,9 @@ def findABA(message):
 def findBAB(message):
 	return findABA(message)
 
-with open("example2.txt") as f:
+with open("input.txt") as f:
 	validIPs = 0
 	for line in f.readlines():
-		print()
 		message = line.strip()
 		outside = ""
 		inside = ""
@@ -25,25 +22,26 @@ with open("example2.txt") as f:
 		babs = []
 		for char in message:
 			if char == "[":
-				abas.append(findABA(outside))
+				outsideABAS = findABA(outside)
+				for foundABA in outsideABAS:
+					abas.append(foundABA)
 				outside = ""
 				within = True
 			elif char == "]":
-				babs.append(findBAB(inside))
+				insideABAS = findBAB(inside)
+				for foundBAB in insideABAS:
+					babs.append(foundBAB)
 				inside = ""
 				within = False
 			elif within:
 				inside += char
 			elif not within:
 				outside += char
-		print(abas)
-		print(babs)
-		for l1 in abas:
-			for aba in l1:
-				print(aba[0])
-				print(aba[1])
-				if aba[1] + aba[0] + aba[1] in babs:
-					validIPs += 1
-		print(validIPs)
-
-	print("validIPs", validIPs)
+		outsideABAS = findABA(outside)
+		for foundABA in outsideABAS:
+			abas.append(foundABA)
+		for aba in abas:
+			if aba[1] + aba[0] + aba[1] in babs:
+				validIPs += 1
+				break
+	print("Valid ip's:", validIPs)
