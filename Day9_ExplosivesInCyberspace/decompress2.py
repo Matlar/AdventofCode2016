@@ -1,16 +1,13 @@
-
+import time
 with open("input.txt") as f:
 	for line in f.readlines():	
 		answer = 0	
 		message = line.strip()
-		messageL = len(message)
 		operators = []
-		index = 0
 		inMarker = False
 		marker = ""
+		t1  = time.time()
 		for char in message:
-			# print(operators)
-			# print(answer)
 			if char == "(":
 				inMarker = True
 			elif char == ")":
@@ -26,17 +23,11 @@ with open("input.txt") as f:
 					if operator[0] > 0:
 						dLength *= operator[1]
 				answer += dLength
+			newOperators = []
 			for operator in operators:
 				operator[0] -= 1
-		# while index < messageL:
-		# 	markStart = message.find("(", index, messageL)
-		# 	if markStart < index:
-		# 		break
-		# 	markEnd = message.find(")", markStart, messageL)
-		# 	marker = message[markStart + 1: markEnd]
-		# 	markL, markR = marker.split("x")
-		# 	index = markEnd + int(markL) + 1
-		# answer += message[index:]
-		
-		# print(instruct)
+				if operator[0] > 0:
+					newOperators.append(operator)
+			operators = newOperators
 		print("Answer:", answer)
+		print(time.time() - t1)
